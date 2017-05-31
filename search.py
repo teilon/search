@@ -4,6 +4,10 @@ from bs4 import BeautifulSoup
 from writer import write_csv
 from writer import write_console
 
+from selenium import webdriver
+
+from time import sleep
+
 host = 'https://kolesa.kz'
 test = True
 
@@ -19,14 +23,26 @@ def get_total_pages(html):
 	pages = len(soup.find('div', class_='pager').find_all('li'))	
 	return pages
 
-def get_addition_data(html):
-	print(0)
-	soup = BeautifulSoup(html, 'lxml')
-	print(1)
-	dl_data = soup.find('dl', class_='clearfix dl-horizontal')
 
-	print('{}{}'.format(dl_data, '\n---------------------'))
+def parse_element_page(url, id_element):
 
+	driver = webdriver.Firefox()
+	driver.get(url);
+	
+	ajax = driver.find_element_by_xpath('//span[@class="action-link showPhonesLink"]')
+	ajax.click()
+
+	sleep(1)
+
+	print('***\t0\t***')
+
+	html = driver.find_element_by_xpath('//*').get_attribute('outerHTML') 
+
+	print(html)
+
+	# phone_elements = driver.find_elements_by_xpath('//span[@class="a-phones phonesContainer phonesContainer_{}"]/ul'.format(id_element))
+	# for li in phone_elements:
+	# 	print('-----\n{}\n-----'.format(li.text))
 
 def parse_selection_page(html):
 	soup = BeautifulSoup(html, 'lxml')
@@ -84,11 +100,16 @@ def parse_selection_page(html):
 			'link':link,
 			'data_id':data_id
 		}
+
+		parse_element_page(host + link, data_id)
 		
 		if not test:
 			write_csv(data)
 		else:
 			write_console(data)
+
+		break
+
 
 def parse_test():
 
@@ -113,7 +134,8 @@ def parse_kolesa(brand = 'toyota', model = 'camry', region = 'almaty', price_fro
 		url_gen = url + page_part + str(i)
 		html = get_html(url_gen)
 
-		get_page_data(html)
+		parse_selection_page(html)
+		break
 
 
 
