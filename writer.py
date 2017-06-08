@@ -26,10 +26,15 @@ def write_csv(data):
 		# 			))
 
 def write_console(data):
-	print('title: {}[{}]\t\tprice: {}\t\tyear: {}\t\tday: {}'.format(
-		data['title'], 
-		data['data_id'], 
-		data['price'], 
-		data['year'],
-		data['date']
-		))
+	keys = sorted(list(data.keys()))
+	for i in keys:
+		print(data[i])		
+
+
+	# print('title: {}[{}]\t\tprice: {}\t\tyear: {}\t\tday: {}'.format(
+	# 	data['title'], 
+	# 	data['data_id'], 
+	# 	data['price'], 
+	# 	data['year'],
+	# 	data['date']
+	# 	))
