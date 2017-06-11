@@ -1,5 +1,7 @@
 import csv
 
+from todb import add_to_mongo
+
 def write_csv(data):
 	with open('kolesa.csv', 'a') as f:
 		writer = csv.writer(f)
@@ -28,7 +30,7 @@ def write_csv(data):
 def write_console(data):
 	keys = sorted(list(data.keys()))
 	for i in keys:
-		print(data[i])		
+		print('{}: {}'.format(i, data[i]))
 
 
 	# print('title: {}[{}]\t\tprice: {}\t\tyear: {}\t\tday: {}'.format(
@@ -38,3 +40,8 @@ def write_console(data):
 	# 	data['year'],
 	# 	data['date']
 	# 	))
+
+def write_db(data):
+	print('saving...')
+	add_to_mongo(data)
+	print('saved')

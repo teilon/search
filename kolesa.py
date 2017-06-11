@@ -6,9 +6,12 @@ from proxy_jumping import get_sleeply_html
 
 from writer import write_csv
 from writer import write_console
+from writer import write_db
+
+from datetime import datetime
 
 host = 'https://kolesa.kz'
-test = True
+test = False
 
 def get_total_pages(html):
 	soup = BeautifulSoup(html, 'lxml')
@@ -20,7 +23,20 @@ def parse_element_page(url, id_element):
 	html = get_sleeply_html(url)
 	soup = BeautifulSoup(html, 'lxml')
 	dl = soup.find('dl', {'class':'clearfix dl-horizontal description-params'}).find_all()
-		
+	
+	titles = {
+		'Город':'region', 
+		'Кузов':'body', 
+		'Объем двигателя, л':'engine_v', 
+		'Пробег':'mileage', 
+		'Коробка передач':'transmission', 
+		'Руль':'steering_wheel', 
+		'Цвет':'color', 
+		'Привод':'drive_unit', 
+		'Растаможен':'customs_cleared'
+		}
+	titles_number = 0
+
 	values = []
 	hastitle = False
 
@@ -28,12 +44,15 @@ def parse_element_page(url, id_element):
 		classname = elem.get('class')[0]
 
 		if classname == 'value-title':
-			title = 'private_{}'.format(elem.text.strip())
+			# title = '{}'.format(elem.text.strip())
+			# print('elem: {}'.format(elem.text.strip()))
+			# print()
+			title = titles[elem.text.strip()]
 			hastitle = True
 			continue
 
 		if classname == 'value' and hastitle:
-			values.append({title:elem.text.strip()})
+			values.append({title:''.join(elem.text.strip().split('\xa0'))})
 			hastitle = False
 
 	return values
@@ -47,12 +66,13 @@ def parse_selection_page(html):
 		# title, price, year, region
 
 		try:
-			data_id = ad['data-id'].strip()
+			advert_id = ad['data-id'].strip()
 		except:
 			continue
 
 		try:
 			title = ad.find('div', class_='list-title').find('a').text.strip()
+			title = ''.join(title.split('\xa0'))
 		except:
 			title = 'none'
 
@@ -63,16 +83,16 @@ def parse_selection_page(html):
 			price = 'none'
 
 		try:
-			year = ad.find('div', class_='list-extra-info').find('span', class_='year').text.strip()
-			year = ''.join(year.split('\xa0'))
+			year_of_issue = ad.find('div', class_='list-extra-info').find('span', class_='year').text.strip()
+			year_of_issue = ''.join(year_of_issue.split('\xa0'))
 		except:
-			year = 'none'
+			year_of_issue = 'none'
 
-		try:
-			region = ad.find('div', class_='list-region').text.strip()
-			region = ''.join(region.split('\xa0'))
-		except:
-			region = 'none'
+		# try:
+		# 	region = ad.find('div', class_='list-region').text.strip()
+		# 	region = ''.join(region.split('\xa0'))
+		# except:
+		# 	region = 'none'
 
 		try:
 			date = ad.find('div', class_='list-views-comments').find('span', class_='date').text.strip()
@@ -86,24 +106,26 @@ def parse_selection_page(html):
 			link = 'none'		
 
 		data = {
-			'base_title':title,
-			'base_price':price,
-			'base_year':year,
-			'base_region':region,
-			'base_date':date,
-			'base_link':host + link,
-			'base_data_id':data_id
+			'title':title,
+			'price':price,
+			'year':year_of_issue,
+			# 'base_region':region,
+			'publication_date':date,
+			'link':host + link,
+			'advert_id':advert_id,
+			'creation_date':datetime.utcnow()
 		}
 
-		values = parse_element_page(host + link, data_id)		
+		values = parse_element_page(host + link, advert_id)		
 		for i in values:
 			data.update(i)
 
-		if not test:
-			write_csv(data)
-		else:
-			write_console(data)
-			break
+		# if not test:
+		# 	write_csv(data)
+		# else:
+		# 	write_console(data)
+		# 	break
+		write_db(data)
 
 
 

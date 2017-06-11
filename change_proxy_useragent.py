@@ -10,8 +10,8 @@ from datetime import datetime
 import csv
 
 
-def get_html(url, useragent=None, proxy=None):
-# def get_html(url):
+# def get_html(url, useragent=None, proxy=None):
+def get_html(url):
 
 	sleeptime = uniform(3,5)
 	sleep(sleeptime)

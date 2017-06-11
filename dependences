@@ -1,0 +1,5 @@
+dependences
+
+bs4
+requests
+pymongo
