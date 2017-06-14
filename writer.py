@@ -43,5 +43,6 @@ def write_console(data):
 
 def write_db(data):
 	print('saving...')
-	add_to_mongo(data)
-	print('saved')
+	isadd = add_to_mongo(data)
+	if isadd: print('saved')
+	print('not saved')

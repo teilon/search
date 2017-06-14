@@ -22,7 +22,12 @@ def parse_element_page(url, id_element):
 
 	html = get_sleeply_html(url)
 	soup = BeautifulSoup(html, 'lxml')
-	dl = soup.find('dl', {'class':'clearfix dl-horizontal description-params'}).find_all()
+	try:
+		dl = soup.find('dl', {'class':'clearfix dl-horizontal description-params'}).find_all()
+	except AttributeError:
+		print('url: {}'.format(url))
+		raise AttributeError()
+
 	
 	titles = {
 		'Город':'region', 
