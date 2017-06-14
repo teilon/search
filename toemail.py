@@ -7,7 +7,7 @@ def send(sender, subject, message, to):
 
 	smtp_server = 'smtp.mail.ru'
 	smtp_port = 465
-	smtp_password = 'goezphstreet87'
+	smtp_password = 'password'
 
 	print('smtp')
 	mail_lib = smtplib.SMTP(host=smtp_server)
