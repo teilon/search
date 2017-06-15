@@ -2,6 +2,8 @@ import csv
 
 from todb import add_to_mongo
 
+from checkdata import check
+
 def write_csv(data):
 	with open('kolesa.csv', 'a') as f:
 		writer = csv.writer(f)
@@ -44,5 +46,8 @@ def write_console(data):
 def write_db(data):
 	print('saving...')
 	isadd = add_to_mongo(data)
-	if isadd: print('saved')
+	if isadd:
+		check(**data)
+		print('saved')
+		return
 	print('not saved')

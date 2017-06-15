@@ -1,11 +1,9 @@
+from beau import nice_display
 import kolesa
 
+@nice_display
 def main():
-	print('begin\n--------------------')
-
 	kolesa.parse_kolesa()
-
-	print('--------------------\nbetti')
 
 
 if __name__ == '__main__':
