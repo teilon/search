@@ -1,9 +1,11 @@
 import smtplib
 
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 
 
-def send(sender, subject, message, to):
+def send(message, sender='aspac@inbox.ru', subject='kolesa', to='aspac@inbox.ru'):
 
 	smtp_server = 'smtp.mail.ru'
 	smtp_port = 465
@@ -15,16 +17,19 @@ def send(sender, subject, message, to):
 	server.starttls()
 	server.login(sender, sender_password)
 
-	msg = '\r\n'.join([
-		'From: {}',
-		'To: {}',
-		'Subject: {}',
-		'',
-		'{}'
-		])
-	msg = msg.format(sender, to, subject, message)
+	msg = MIMEMultipart('alternative')
+	msg.set_charset('utf-8')
 
-	server.sendmail(sender, to, msg)
+	msg['Subject'] = subject
+	msg['From'] = sender
+	msg['To'] = to
+	
+	text = MIMEText(message, 'plain')
+
+	msg.attach(text)
+
+	server.sendmail(sender, to, msg.as_string())
+
 	server.quit()
 
 
@@ -33,7 +38,7 @@ def test():
 	print('{0}{1}{0}'.format(sep, 'begin'))
 	message = 'hello!'
 
-	send('aspac@inbox.ru', 'the first!', message, 'aspac@inbox.ru')
+	send(message)
 
 	print('{0}{1}{0}'.format(sep, 'betti'))
 

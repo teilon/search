@@ -1,7 +1,8 @@
 def nice_display(func):
 	def inner(*args, **kwargs):
-		sep = '-'*15
-		print('{0}{1}{0}'.format(sep, 'begin'))
-		func()
-		print('{0}{1}{0}'.format(sep, 'betti'))
+		start = '+'*15
+		end = '-'*15
+		print('{0}{1}{0}'.format(start, func.__name__))
+		func(*args, **kwargs)
+		print('{0}{1}{0}'.format(end, func.__name__))
 	return inner
