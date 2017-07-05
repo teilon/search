@@ -1,9 +1,10 @@
 from bs4 import BeautifulSoup
 from datetime import datetime
+import re
 
 from beau import nice_display
 from proxy_jumping import get_sleeply_html
-from checkdata import check
+from checkdata import check_by_price
 from todb import add_to_mongo
 
 host = 'https://kolesa.kz'
@@ -37,7 +38,7 @@ def parse_selection_page(html):
 
 		try:
 			title = ad.find('div', class_='list-title').find('a').text.strip()
-			title = ''.join(title.split('\xa0'))
+			title = re.match('\d+', ''.join(title.split('\xa0')))
 		except:
 			title = 'none'
 
@@ -77,7 +78,7 @@ def parse_selection_page(html):
 def write_db(data):
 	isadd = add_to_mongo(data)
 	if isadd:
-		check(**data)
+		check_by_price(**data)
 		return
 
 @nice_display
