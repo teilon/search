@@ -32,13 +32,21 @@ def check_by_price(**data):
 		offers.insert_one(offer)
 		# ismutated = True
 
+	pipeline_max_price = [
+		{'$group':{'_id':'maxid', 'max_price':{'$max':'$price'}}}
+	]
+
 	ofs = offers.find()
 	for of in ofs:
 		if of['price'] > advert['price']:
 			offer = advert
 			# offer['crit_level'] = -1
 			# offers.insert_one(offer)
-			no = max(list['price'])
+
+			
+			aggr = test.aggregate(pipeline)
+			no = list(aggr)[0]['max_price']
+			
 			ofs.remove(no)
 			offers.insert_one(offer)
 
