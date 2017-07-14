@@ -28,19 +28,21 @@ def collect():
 			ofs = offers.find()
 			ismax = False
 			maximus = ofs[0]
-			for of in ofs:
+			for of in ofs:				
 				if of['price'] >= maximus['price']:
 					maximus = of
 
 				if not ismax:
 					if ad['price'] < of['price']:
 						ismax = True
+			cont = True
 			if ismax:
+				ofs = offers.find()
 				for of in ofs:
-					if of['price'] == maximus['price']:
+					if of['price'] == maximus['price'] and cont:
 						offers.delete_one({'advert_id':of['advert_id']})
 						offers.insert_one(ad)
-						break
+						cont = False
 						# of = ad
 						
 
@@ -50,12 +52,24 @@ def collect():
 
 
 
+def adverts_correct():
+	client = MongoClient('localhost', 27017)
+
+	db = client['kolesa']
+	adverts = db['adverts']
+
+	utc = datetime.utcnow()
+	print(utc)
+
+	border = timedelta(days=-count_of_days)
+	border_date = utc + border
+
+	ads = adverts.find({},{'old':0, 'creation_date':{'$lt':border_date}})
+	for ad in ads:
+		ad['old'] = 1
 
 
-
-
-			
-def correct_by_data():
+def offers_correct():
 	client = MongoClient('localhost', 27017)
 
 	db = client['kolesa']
@@ -68,6 +82,11 @@ def correct_by_data():
 	border_date = utc + border
 
 	offers.delete_many({'creation_date':{'$lt':border_date}})
+			
+def correct_by_data():
+	adverts_correct()
+	offers_correct()
+	
 	
 		
 
