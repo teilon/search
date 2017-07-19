@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from toemail import send
 
 def add_to_mongo(data):
 	client = MongoClient('localhost', 27017)
@@ -13,7 +14,6 @@ def add_to_mongo(data):
 	return False
 
 
-from toemail import send
 def test():
 	client = MongoClient('localhost', 27017)
 

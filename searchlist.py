@@ -6,6 +6,7 @@ from beau import nice_display
 from proxy_jumping import get_sleeply_html
 from checkdata import check_by_price
 from todb import add_to_mongo
+from collect_offers import check_advert
 
 host = 'https://kolesa.kz'
 
@@ -65,7 +66,8 @@ def parse_selection_page(html):
 			'publication_date':date,
 			'link':host + link,
 			'advert_id':advert_id,
-			'creation_date':datetime.utcnow()
+			'creation_date':datetime.utcnow(),
+			'old':False
 		}
 		
 		# for i in data:
@@ -78,7 +80,8 @@ def parse_selection_page(html):
 def write_db(data):
 	isadd = add_to_mongo(data)
 	if isadd:
-		check_by_price(**data)
+		check_advert(**data)
+		# check_by_price(**data)
 		return
 
 @nice_display
