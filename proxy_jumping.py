@@ -12,8 +12,9 @@ def get_sleeply_html(url):
 	while True:
 		
 		try:
-			proxy, useragent = get_new_proxies()
-			html = get_html(url, useragent, proxy)
+			# proxy, useragent = get_new_proxies()
+			# html = get_html(url, useragent, proxy)
+			html = get_html(url)
 		except Exception as e:
 			# to_log(type(e))
 			continue

@@ -1,63 +1,43 @@
-import pymongo
 from pymongo import MongoClient
-import datetime
-import csv
+# from toemail import send
 
+def add_to_mongo(data):
 
+	client = MongoClient('localhost', 27017)
 
-def get_db(client):
-	return client['lern']
+	db = client['kolesa']
+	adverts = db['adverts']
 
-def get_collection(client):
-	db = get_db(client)
-	return db['unicorns']
+	advert = adverts.find_one({'advert_id':data['advert_id']})
+	if advert is None:
+		adverts.insert_one(data)
+		return True
+	return False
 
-def check_data(obj, attr):
-	try:
-		result = obj[attr]
-	except :
-		result = 'none'
-	return result
-
-def write_csv(unicorn):
-	with open('unicorns.csv', 'a') as f:
-		writer = csv.writer(f)
-
-
-		writer.writerow((
-					check_data(unicorn, 'name'),
-					check_data(unicorn, 'dob'),
-					check_data(unicorn, 'loves'),
-					check_data(unicorn, 'weight'),
-					check_data(unicorn, 'gender'),
-					check_data(unicorn, 'vampires'),
-					))
 
 def test():
 	client = MongoClient('localhost', 27017)
-	unicorns = get_collection(client)
 
-	new_unicorn = {
-		'name':'bridgit',
-		'dob':datetime.datetime.utcnow(),
-		'loves':['carrot'],
-		'weight':'453',
-		'gender':'f',
-		'vampires':3
-	}
+	db = client['kolesa']
+	offers = db['offers']
 
-	for unicorn in unicorns.find():
-		write_csv(unicorn)
+	offers_ = offers.find({})
+	messages = '';
 
+	for of in offers_:
+		message = '\ntitle:\t{}\n\tadvert:\t{}\n\tdate:\t{}\n\tprice:\t{}\n\tlink:\t{}\n'.format(
+			of['title'], 
+			of['advert_id'], 
+			of['publication_date'],
+			of['price'],
+			of['link'])
+		print(message)
+		messages += message
 
+	send(messages)
 
-
-def main():
-	print('begin')
-	test()
-	print('betti')
 
 
 
 if __name__ == '__main__':
-	main()
+	test()
