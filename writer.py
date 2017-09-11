@@ -45,7 +45,7 @@ def write_console(data):
 
 def write_db(data):
 
-	pass
+	print('write')
 
 	# isadd = add_to_mongo(data)
 
