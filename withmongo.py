@@ -1,43 +1,46 @@
 from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
+import re
 # from toemail import send
 
-def add_to_mongo(data):
+HOST = '127.0.0.1'
+PORT = 27017
 
-	client = MongoClient('localhost', 27017)
+def mongodb_conn():
 
-	db = client['kolesa']
+	conn = MongoClient(host=HOST, port=PORT)
+	try:
+		conn.admin.command('ismaster')
+	except ConnectionFailure as msg:
+		print('Could not connect to server: {}'.format(str(msg)))
+		return None
+
+	return conn
+						 
+
+def save_to_mongodb(data):
+
+	conn = mongodb_conn()
+	if conn is None:
+		return	
+
+	print('its all right')
+
+	db = conn['kolesa']
 	adverts = db['adverts']
 
 	advert = adverts.find_one({'advert_id':data['advert_id']})
 	if advert is None:
-		adverts.insert_one(data)
-		return True
-	return False
+		adverts.insert_one(data)	
 
+def read_config():
 
-def test():
-	client = MongoClient('localhost', 27017)
+	host_pattern = '^host:[\d.]+$'
+	global HOST
 
-	db = client['kolesa']
-	offers = db['offers']
-
-	offers_ = offers.find({})
-	messages = '';
-
-	for of in offers_:
-		message = '\ntitle:\t{}\n\tadvert:\t{}\n\tdate:\t{}\n\tprice:\t{}\n\tlink:\t{}\n'.format(
-			of['title'], 
-			of['advert_id'], 
-			of['publication_date'],
-			of['price'],
-			of['link'])
-		print(message)
-		messages += message
-
-	send(messages)
-
-
-
-
-if __name__ == '__main__':
-	test()
+	with open('mongo.conf', 'r') as f:
+		for line in f:
+			h = re.match(host_pattern, line)
+			if h is not None:
+				HOST = h.group(0).split(':')[1]
+				break

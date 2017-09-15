@@ -1,6 +1,6 @@
 # import csv
 
-from withmongo import add_to_mongo
+from withmongo import save_to_mongodb, read_config
 
 # from checkdata import check
 
@@ -45,14 +45,9 @@ def write_console(data):
 
 def write_db(data):
 
-	print('write')
+	read_config()
+	save_to_mongodb(data)
 
-	# isadd = add_to_mongo(data)
-
-	# if isadd:
-	# 	print('saved')
-	# else:
-	# 	print('NOT saved')
 
 	# if isadd:
 	# 	check(**data)
