@@ -1,3 +1,5 @@
+from time import sleep
+
 def main():
 
 	n = 0
