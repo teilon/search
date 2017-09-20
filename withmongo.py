@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
+from datetime import datetime
 import re
 # from toemail import send
 
@@ -24,14 +25,17 @@ def save_to_mongodb(data):
 	if conn is None:
 		return	
 
-	print('its all right')
+	# print('its all right')
 
 	db = conn['kolesa']
 	adverts = db['adverts']
 
 	advert = adverts.find_one({'advert_id':data['advert_id']})
 	if advert is None:
-		adverts.insert_one(data)	
+
+		data.update({'creation_date':datetime.utcnow(), 'old':False})
+
+		adverts.insert_one(data)
 
 def read_config():
 
