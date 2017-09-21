@@ -1,10 +1,10 @@
 from pymongo import MongoClient
 from datetime import datetime, timedelta
-
+import re
 from bson.code import Code
+from beau import nice_display
 
-
-def mongodb_conn(HOST = '127.0.0.1', PORT = 27017):
+def get_mongo_connection(HOST = '127.0.0.1', PORT = 27017):
 
 	conn = MongoClient(host=HOST, port=PORT)
 	try:
@@ -15,63 +15,45 @@ def mongodb_conn(HOST = '127.0.0.1', PORT = 27017):
 
 	return conn
 
-def get_notolds():
-'''
-get not olds
-correct by date
-set new old
-return dict notolds
-'''
+@nice_display
+def collect():
 	config = read_config()
-	conn = mongodb_conn(HOST = config['host'])
+	conn = get_mongo_connection(HOST = config['host'])
 	if conn is None:
 		return
 
 	db = conn['kolesa']
 	adverts = db['adverts']
 
-	# advert = adverts.find_one({'advert_id':data['advert_id']})	
-	# if advert is None:
-	# 	adverts.insert_one(data)
-
 	threedays = timedelta(days=3)
 	result = adverts.update_many({'old':{'$ne':True}, 'creation_date':{'$lt':datetime.utcnow() - threedays}}, {'$set': {'old':True}})
 
-	# ads = adverts.find({'old':False})
-
 	mapper = Code("""
 		function(){
-			this
+			var key = {
+				title: this.advert_id,
+				price: this.price
+			};
+			emit(key, {price: this.price});
 		}
 		""")
 
+	reducer = Code("""
+		function(key, values){
+			var result = 0;
+			values.forEach(function(value){
+				result += values['price']
+			})
+			return {price: result}
+		}
+		""")
 
-
-
-def get_best_by_price(notolds):
-'''
-get best adverts by price
-return dict bests
-'''
-	pass
-
-
-def read_config():
-
-	host_pattern = '^host:[\d.]+$'
-	global HOST
-
-	with open('mongo.conf', 'r') as f:
-		for line in f:
-			h = re.match(host_pattern, line)
-			if h is not None:
-				HOST = h.group(0).split(':')[1]
-				break
+	adverts.map_reduce(mapper, reducer, 'collect')
 
 def read_config():
 
 	host_pattern = '^host:[\d.]+$'
-	host = 127.0.0.1
+	host = '127.0.0.1'
 
 	with open('mongo.conf', 'r') as f:
 		for line in f:
@@ -84,3 +66,11 @@ def read_config():
 		'host':host
 	}
 	return result
+
+# from beau import nice_display
+# @nice_display
+# def main():
+# 	get_notolds()
+
+# if __name__ == '__main__':
+# 	main()

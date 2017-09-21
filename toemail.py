@@ -5,12 +5,12 @@ from email.mime.multipart import MIMEMultipart
 
 
 
-def send(message, sender='aspac@inbox.ru', subject='kolesa', to='aspac@inbox.ru'):
+def send(message, sender='test_kolesa@mail.ru', subject='kolesa', to='aspac@inbox.ru'):
 
 	smtp_server = 'smtp.mail.ru'
 	smtp_port = 465
 
-	sender_password = 'password'
+	sender_password = 'testirovanie'
 
 	server = smtplib.SMTP(host=smtp_server)	
 	server.ehlo()
