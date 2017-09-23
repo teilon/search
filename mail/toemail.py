@@ -4,7 +4,6 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 
-
 def send(message, sender='test_kolesa@mail.ru', subject='kolesa', to='aspac@inbox.ru'):
 
 	smtp_server = 'smtp.mail.ru'
@@ -31,23 +30,3 @@ def send(message, sender='test_kolesa@mail.ru', subject='kolesa', to='aspac@inbo
 	server.sendmail(sender, to, msg.as_string())
 
 	server.quit()
-
-
-def test():
-	sep = '-'*15
-	print('{0}{1}{0}'.format(sep, 'begin'))
-	message = 'hello!'
-
-	send(message)
-
-	print('{0}{1}{0}'.format(sep, 'betti'))
-
-
-
-
-
-
-
-
-if __name__ == '__main__':
-	test()

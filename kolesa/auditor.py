@@ -2,7 +2,8 @@ from pymongo import MongoClient
 from datetime import datetime, timedelta
 import re
 from bson.code import Code
-from beau import nice_display
+
+from common.beau import nice_display
 
 def get_mongo_connection(HOST = '127.0.0.1', PORT = 27017):
 

@@ -1,13 +1,9 @@
-from beau import nice_display
 from bs4 import BeautifulSoup
-
-from proxy_jumping import get_sleeply_html
-
-# from writer import write_csv
-# from writer import write_console
-from writer import write_db
-
 from datetime import datetime
+
+from common.beau import nice_display
+from kolesa.proxy_jumping import get_sleeply_html
+from kolesa.writer import write_db
 
 host = 'https://kolesa.kz'
 test = False

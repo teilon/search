@@ -1,7 +1,8 @@
-from beau import nice_display
 from time import sleep
-import kolesa
-import auditor
+
+from common.beau import nice_display
+import kolesa.kolesa
+import kolesa.auditor
 
 @nice_display
 def main():

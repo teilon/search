@@ -1,9 +1,12 @@
 from random import choice
 from random import uniform
-
 from time import sleep
+import requests
 
-from common import get_html
+def get_html(url, useragent=None, proxy=None):
+	
+	r = requests.get(url, headers=useragent, proxies=proxy)
+	return r.text
 
 def get_sleeply_html(url):
 	sleeptime = uniform(3,5)
