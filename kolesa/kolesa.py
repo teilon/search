@@ -8,7 +8,7 @@ from kolesa.writer import write_db
 host = 'https://kolesa.kz'
 test = False
 
-@nice_display
+# @nice_display
 def get_total_pages(html):
 	soup = BeautifulSoup(html, 'lxml')
 	pages = len(soup.find('div', class_='pager').find_all('li'))	
@@ -59,7 +59,7 @@ def get_total_pages(html):
 
 # 	return values
 
-@nice_display
+# @nice_display
 def parse_selection_page(html):
 	soup = BeautifulSoup(html, 'lxml')
 
@@ -122,7 +122,7 @@ def parse_selection_page(html):
 		write_db(data)
 
 
-@nice_display
+# @nice_display
 def gen_url(brand = 'toyota', 
 			model = 'camry', 
 			region = 'almaty', 
@@ -140,7 +140,7 @@ def gen_url(brand = 'toyota',
 	
 	return url
 
-@nice_display
+# @nice_display
 def parse_kolesa():
 
 	url = gen_url()

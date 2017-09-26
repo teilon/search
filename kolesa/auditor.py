@@ -16,7 +16,7 @@ def get_mongo_connection(HOST = '127.0.0.1', PORT = 27017):
 
 	return conn
 
-@nice_display
+# @nice_display
 def collect():
 	config = read_config()
 	conn = get_mongo_connection(HOST = config['host'])
