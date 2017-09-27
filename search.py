@@ -4,7 +4,7 @@ from common.beau import nice_display
 import kolesa.kolesa
 import kolesa.auditor
 
-@nice_display
+# @nice_display
 def main():
 
 	while(True):
