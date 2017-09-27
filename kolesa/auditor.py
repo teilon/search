@@ -20,7 +20,7 @@ from common.withmongo import get_mongo_connection, read_config
 # @nice_display
 def collect():
 	config = read_config()
-	conn = get_mongo_connection(HOST = config['host'])
+	conn = get_mongo_connection(host = config['host'])
 	if conn is None:
 		return
 
