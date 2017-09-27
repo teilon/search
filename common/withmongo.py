@@ -19,7 +19,7 @@ def read_config():
 	host_pattern = '^host:[\d.]+$'
 	host = '127.0.0.1'
 
-	with open('common/mongo.conf', 'r') as f:
+	with open('common/mongo_conf', 'r') as f:
 		for line in f:
 			h = re.match(host_pattern, line)
 			if h is not None:

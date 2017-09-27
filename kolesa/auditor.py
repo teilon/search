@@ -4,17 +4,18 @@ import re
 from bson.code import Code
 
 from common.beau import nice_display
+from common.withmongo import get_mongo_connection, read_config
 
-def get_mongo_connection(HOST = '127.0.0.1', PORT = 27017):
+# def get_mongo_connection(HOST = '127.0.0.1', PORT = 27017):
 
-	conn = MongoClient(host=HOST, port=PORT)
-	try:
-		conn.admin.command('ismaster')
-	except ConnectionFailure as msg:
-		print('Could not connect to server: {}'.format(str(msg)))
-		return None
+# 	conn = MongoClient(host=HOST, port=PORT)
+# 	try:
+# 		conn.admin.command('ismaster')
+# 	except ConnectionFailure as msg:
+# 		print('Could not connect to server: {}'.format(str(msg)))
+# 		return None
 
-	return conn
+# 	return conn
 
 # @nice_display
 def collect():
@@ -51,22 +52,22 @@ def collect():
 
 	adverts.map_reduce(mapper, reducer, 'collect')
 
-def read_config():
+# def read_config():
 
-	host_pattern = '^host:[\d.]+$'
-	host = '127.0.0.1'
+# 	host_pattern = '^host:[\d.]+$'
+# 	host = '127.0.0.1'
 
-	with open('mongo.conf', 'r') as f:
-		for line in f:
-			h = re.match(host_pattern, line)
-			if h is not None:
-				host = h.group(0).split(':')[1]
-				break
+# 	with open('common/mongo_conf', 'r') as f:
+# 		for line in f:
+# 			h = re.match(host_pattern, line)
+# 			if h is not None:
+# 				host = h.group(0).split(':')[1]
+# 				break
 
-	result = {
-		'host':host
-	}
-	return result
+# 	result = {
+# 		'host':host
+# 	}
+# 	return result
 
 # from beau import nice_display
 # @nice_display
