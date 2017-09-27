@@ -8,8 +8,8 @@ from kolesa.auditor import collect
 def main():
 
 	while(True):
-		kolesa.parse_kolesa()
-		auditor.collect()
+		parse_kolesa()
+		collect()
 
 		sleep(3600)
 		# sleep(120)
