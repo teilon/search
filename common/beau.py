@@ -15,3 +15,22 @@ def nice_display(func):
 		return result
 		
 	return inner
+
+def logger(func):
+
+	@functools.wraps(func)
+	def inner(*args, **kwargs):
+				
+		to_log('start {}'.format(func.__name__))
+
+		result = func(*args, **kwargs)
+
+		to_log('end {}'.format(func.__name__))
+
+		return result
+		
+	return inner
+
+def to_log(log):
+	with open('/tmp/data/log.txt', 'a') as f:
+		f.write('{}\n'.format(log))

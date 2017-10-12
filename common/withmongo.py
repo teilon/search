@@ -3,6 +3,8 @@ from pymongo.errors import ConnectionFailure
 from datetime import datetime
 import re
 
+from common.beau import to_log
+
 def get_mongo_connection(host='127.0.0.1',port=27017):
 
 	conn = MongoClient(host=host, port=port)
@@ -45,6 +47,7 @@ def save_to_mongodb(data, host='127.0.0.1'):
 
 		data.update({'creation_date':datetime.utcnow(), 'old':False})
 
+		to_log('save to')
 		adverts.insert_one(data)
 
 def collect_data():

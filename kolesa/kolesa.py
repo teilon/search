@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 from common.beau import nice_display
+from common.beau import logger
 from kolesa.proxy_jumping import get_sleeply_html
 from kolesa.writer import write_db
 
@@ -60,6 +61,7 @@ def get_total_pages(html):
 # 	return values
 
 # @nice_display
+@logger
 def parse_selection_page(html):
 	soup = BeautifulSoup(html, 'lxml')
 
@@ -119,6 +121,10 @@ def parse_selection_page(html):
 		# 										data['link'],
 		# 										data['advert_id'],
 		# 										))
+
+
+
+		# print('save to db')
 		write_db(data)
 
 
@@ -141,6 +147,7 @@ def gen_url(brand = 'toyota',
 	return url
 
 # @nice_display
+@logger
 def parse_kolesa():
 
 	url = gen_url()

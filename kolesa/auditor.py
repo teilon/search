@@ -4,6 +4,7 @@ import re
 from bson.code import Code
 
 from common.beau import nice_display
+from common.beau import logger
 from common.withmongo import get_mongo_connection, read_config
 
 # def get_mongo_connection(HOST = '127.0.0.1', PORT = 27017):
@@ -18,6 +19,7 @@ from common.withmongo import get_mongo_connection, read_config
 # 	return conn
 
 # @nice_display
+@logger
 def collect():
 	config = read_config()
 	conn = get_mongo_connection(host = config['host'])
