@@ -18,7 +18,7 @@ def get_mongo_connection(host='127.0.0.1',port=27017):
 
 def read_config():
 
-	host_pattern = '^host:[\d.]+$'
+	host_pattern = '^host:[\d\w.]+$'
 	host = '127.0.0.1'
 
 	with open('common/mongo_conf', 'r') as f:
